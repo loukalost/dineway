@@ -3,6 +3,7 @@ import MyTabBar from './Tabbar'
 import HomeNavigator from './HomeNavigator'
 import SurpriseNavigator from './SurpriseNavigator'
 import ReservationsNavigator from './ReservationsNavigator'
+import InfoRestaurantNavigator from './InfoRestaurantNavigator'
 
 const Tabs = createBottomTabNavigator()
 
@@ -16,6 +17,8 @@ function MainNavigator({ role }) {
         <>
           <Tabs.Screen name='Home' component={HomeNavigator} />
           <Tabs.Screen name='Surprise' component={SurpriseNavigator} />
+          <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
+          <Tabs.Screen name='Info restaurant' component={InfoRestaurantNavigator} />
         </>
       ) : (
         <>

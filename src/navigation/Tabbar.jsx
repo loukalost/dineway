@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { useLinkBuilder } from '@react-navigation/native'
 import { PlatformPressable } from '@react-navigation/elements'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons' // Correction ici
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 const icon = {
   Home: 'home-filled',
