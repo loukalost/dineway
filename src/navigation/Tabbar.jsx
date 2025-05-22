@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import { useLinkBuilder } from '@react-navigation/native'
 import { PlatformPressable } from '@react-navigation/elements'
-import Icon from '@react-native-vector-icons/material-design-icons'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons' // Correction ici
 
 const icon = {
   Home: 'home-filled',
-  Surprise: 'random',
+  Surprise: 'casino', // exemple d'icône MaterialIcons
   Reservations: 'table-restaurant',
 }
 
@@ -16,7 +16,6 @@ function MyTabBar({ state, descriptors, navigation }) {
     <View style={{ flexDirection: 'row' }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
-
         const isFocused = state.index === index
 
         const onPress = () => {
@@ -49,8 +48,8 @@ function MyTabBar({ state, descriptors, navigation }) {
             onLongPress={onLongPress}
             style={styles.button}
           >
-            <Icon
-              name={`${isFocused ? icon[route.name] : icon[route.name] + '-outline' || 'progress-question'}`}
+            <MaterialIcons
+              name={icon[route.name] || 'help-outline'}
               size={isFocused ? 40 : 30}
             />
           </PlatformPressable>
