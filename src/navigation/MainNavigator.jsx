@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import MyTabBar from './TabBar'
+import MyTabBar from './Tabbar'
 import HomeNavigator from './HomeNavigator'
 import SurpriseNavigator from './SurpriseNavigator'
 import ReservationsNavigator from './ReservationsNavigator'

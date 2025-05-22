@@ -1,21 +1,57 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import MainNavigator from './navigation/MainNavigator'
+import { NotifierWrapper } from 'react-native-notifier'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Colors } from './styles/Colors.js'
+
+const myTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...Colors
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const linking = {
+  prefixes: [
+    'www.woolens.app',
+    'woolens.app',
+    'https://woolens.app',
+    'http://woolens.app',
+    'https://www.woolens.app',
+    'http://www.woolens.app',
+    'woolens://',
+    'https://woolens://',
+    'http://woolens://'
+  ],
+  config: {
+    screens: {
+      Auth: 'auth',
+      WCAuth: 'wc-auth',
+      WCAuthReturn: 'wc-auth-return',
+      WCAuthCallback: {
+        path: 'wc-auth-callback'
+      }
+    }
+  }
+}
+
+function App() {
+  return (
+    <GestureHandlerRootView>
+      <NotifierWrapper>
+        <NavigationContainer linking={linking} theme={myTheme}>
+          <MainNavigator />
+        </NavigationContainer>
+      </NotifierWrapper>
+    </GestureHandlerRootView>
+  )
+}
+
+export default App
