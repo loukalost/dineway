@@ -1,53 +1,31 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native'
+import React, { useEffect, useState } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
 import MainNavigator from './navigation/MainNavigator'
 import { NotifierWrapper } from 'react-native-notifier'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { Colors } from './styles/Colors.js'
-
-const myTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...Colors
-  }
-}
-
-const linking = {
-  prefixes: [
-    'www.woolens.app',
-    'woolens.app',
-    'https://woolens.app',
-    'http://woolens.app',
-    'https://www.woolens.app',
-    'http://www.woolens.app',
-    'woolens://',
-    'https://woolens://',
-    'http://woolens://'
-  ],
-  config: {
-    screens: {
-      Auth: 'auth',
-      WCAuth: 'wc-auth',
-      WCAuthReturn: 'wc-auth-return',
-      WCAuthCallback: {
-        path: 'wc-auth-callback'
-      }
-    }
-  }
-}
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import ChoixRole from './screens/ChoiceRole'
 
 function App() {
+  const [initialRoute, setInitialRoute] = useState(null)
+
+  useEffect(() => {
+    const checkRole = async () => {
+      const role = await AsyncStorage.getItem('userRole')
+      setInitialRoute(role)
+    }
+    checkRole()
+  }, [])
+
   return (
-    <GestureHandlerRootView>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <NotifierWrapper>
-        <NavigationContainer linking={linking} theme={myTheme}>
-          <MainNavigator />
+        <NavigationContainer>
+          {initialRoute ? (
+            <MainNavigator role={initialRoute} />
+          ) : (
+            <ChoixRole setInitialRoute={setInitialRoute} />
+          )}
         </NavigationContainer>
       </NotifierWrapper>
     </GestureHandlerRootView>

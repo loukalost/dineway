@@ -6,17 +6,22 @@ import ReservationsNavigator from './ReservationsNavigator'
 
 const Tabs = createBottomTabNavigator()
 
-function MainNavigator() {
+function MainNavigator({ role }) {
   return (
     <Tabs.Navigator
-      screenOptions={{
-        headerShown: false
-      }}
+      screenOptions={{ headerShown: false }}
       tabBar={(props) => <MyTabBar {...props} />}
     >
-      <Tabs.Screen name='Home' component={HomeNavigator} />
-      <Tabs.Screen name='Surprise' component={SurpriseNavigator} />
-      <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
+      {role === 'utilisateur' ? (
+        <>
+          <Tabs.Screen name='Home' component={HomeNavigator} />
+          <Tabs.Screen name='Surprise' component={SurpriseNavigator} />
+        </>
+      ) : (
+        <>
+          <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
+        </>
+      )}
     </Tabs.Navigator>
   )
 }
