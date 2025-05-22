@@ -1,11 +1,29 @@
-import { Text, View } from 'react-native'
+import React from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import MapView from 'react-native-maps';
 
-function HomeScreen() {
+export default function App() {
   return (
-    <View>
-      <Text>Home Screen</Text>
+    <View style={styles.container}>
+      <MapView
+        style={styles.map}
+        initialRegion={{
+          latitude: 48.8588443,
+          longitude: 2.2943506,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+      />
     </View>
-  )
+  );
 }
 
-export default HomeScreen
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+  },
+});

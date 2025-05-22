@@ -2,6 +2,13 @@
   "expo": {
     "name": "dineway",
     "slug": "dineway",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCGxTFZ2f1w5EQPowrUn0xHaCa66JgD7-g"
+        }
+      }
+    }
   }
 }
