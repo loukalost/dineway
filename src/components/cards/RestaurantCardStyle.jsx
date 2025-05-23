@@ -21,6 +21,7 @@ export default StyleSheet.create({
   rowSpace: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontWeight: 'bold',

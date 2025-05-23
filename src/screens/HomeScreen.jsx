@@ -1,6 +1,7 @@
-import { StyleSheet, View, Dimensions, Text, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, View, Dimensions, Text, FlatList, ScrollView } from 'react-native'
 import RestaurantCard from '../components/cards/RestaurantCard';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import HomeFilter from '../components/filters/HomeFilter';
 
 const restaurantsData = [
   {
@@ -85,46 +86,24 @@ const restaurantsData = [
   },
 ];
 
-const filtersData = ['Prix', 'Nombre de personnes', 'Type de restaurant', 'Distance'];
-
-function HomeScreen() {
-  const [activeFilter, setActiveFilter] = useState(null);
-
-  return (
-    <View style={styles.mainContainer}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Bienvenue utilisateur !</Text>
-        <View style={styles.filtersRow}>
-          {filtersData.map((filter, i) => (
-            <TouchableOpacity
-              key={i}
-              style={activeFilter === i ? styles.activeFilter : styles.filter}
-              onPress={() => setActiveFilter(i)}
-            >
-              <Text style={activeFilter === i ? { color: '#fff' } : {}}>{filter}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-        <FlatList
-          data={restaurantsData}
-          renderItem={({ item }) => {
-            const details = getRestaurantDetails(item.id);
-            return (
-              <RestaurantCard
-                restaurant={item}
-                address={details.address}
-                hours={details.hours}
-                seats={details.seats}
-              />
-            );
-          }}
-          keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={{ paddingBottom: 100 }}
-        />
-      </View>
-    </View>
-  );
-}
+const filtersData = [
+  {
+    label: 'Prix',
+    options: ['Tous', 'Moins de 10€', '10-12€', 'Plus de 12€'],
+  },
+  {
+    label: 'Nombre de personnes',
+    options: ['Tous', '1', '2', '3+', 'Groupe'],
+  },
+  {
+    label: 'Type de restaurant',
+    options: ['Tous', 'Italien', 'Japonais', 'Vegan', 'Street Food', 'Oriental'],
+  },
+  {
+    label: 'Distance',
+    options: ['Tous', '< 1km', '1-1.5km', '> 1.5km'],
+  },
+];
 
 function getRestaurantDetails(id) {
   switch (id) {
@@ -185,22 +164,105 @@ function getRestaurantDetails(id) {
   }
 }
 
+function filterRestaurants(restaurants, selectedFilters) {
+  return restaurants.filter((restaurant) => {
+    // Prix
+    const prix = selectedFilters[0];
+    if (prix === "Moins de 10€" && restaurant.price >= 10) return false;
+    if (prix === "10-12€" && (restaurant.price < 10 || restaurant.price > 12)) return false;
+    if (prix === "Plus de 12€" && restaurant.price <= 12) return false;
+
+    // Type de restaurant
+    const type = selectedFilters[2];
+    if (
+      type !== "Tous" &&
+      !restaurant.tags.some((tag) => tag.toLowerCase().includes(type.toLowerCase()))
+    ) {
+      return false;
+    }
+
+    // Distance
+    const distance = selectedFilters[3];
+    const distValue = parseFloat(restaurant.distance);
+    if (distance === "< 1km" && distValue >= 1) return false;
+    if (distance === "1-1.5km" && (distValue < 1 || distValue > 1.5)) return false;
+    if (distance === "> 1.5km" && distValue <= 1.5) return false;
+
+    return true;
+  });
+}
+
+function HomeScreen() {
+  const [selectedFilters, setSelectedFilters] = useState(Array(filtersData.length).fill('Tous'));
+  const filteredRestaurants = filterRestaurants(restaurantsData, selectedFilters);
+
+  return (
+    <View style={styles.mainContainer}>
+      <View style={styles.container}>
+        <Text style={styles.header}>Bienvenue utilisateur !</Text>
+        <View style={[styles.filtersRow, { overflow: 'visible', zIndex: 100 }]}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ overflow: 'visible' }}
+            style={{ overflow: 'visible' }}
+          >
+            {filtersData.map((filter, i) => (
+              <HomeFilter
+                key={i}
+                filter={filter}
+                selectedFilters={selectedFilters}
+                setSelectedFilters={setSelectedFilters}
+                i={i}
+                label={filter.label}
+              />
+            ))}
+          </ScrollView>
+        </View>
+        <FlatList
+          data={filteredRestaurants}
+          renderItem={({ item }) => {
+            const details = getRestaurantDetails(item.id);
+            return (
+              <RestaurantCard
+                restaurant={item}
+                address={details.address}
+                hours={details.hours}
+                seats={details.seats}
+              />
+            );
+          }}
+          keyExtractor={(item, index) => index.toString()}
+          contentContainerStyle={{ paddingBottom: 100 }}
+          ListEmptyComponent={
+            <Text style={styles.noRestaurant}>Aucun restaurant trouvé</Text>
+          }
+        />
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   mainContainer: {
     width: '100%',
     flex: 1,
     backgroundColor: '#fff',
-    margin: 'auto',
     paddingTop: 50,
   },
   container: {
     width: '90%',
-    margin: 'auto',
+    alignSelf: 'center',
   },
   header: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 16,
+  },
+  noRestaurant: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
   },
   map: {
     width: Dimensions.get('window').width,
