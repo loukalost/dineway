@@ -3,12 +3,12 @@ import ReservationsScreen from '../screens/ReservationsScreen'
 
 const Stack = createNativeStackNavigator()
 
-function ReservationsNavigator() {
+function ReservationNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name='Reservations' component={ReservationsScreen} options={{ headerShown: false }} />
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='ReservationScreen' component={ReservationsScreen} />
     </Stack.Navigator>
   )
 }
 
-export default ReservationsNavigator
+export default ReservationNavigator

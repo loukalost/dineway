@@ -3,12 +3,12 @@ import InfoRestaurantScreen from '../screens/InfoRestaurantScreen'
 
 const Stack = createNativeStackNavigator()
 
-function HomeNavigator() {
+function InfoRestaurantNaviguator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Information restaurant' component={InfoRestaurantScreen} />
     </Stack.Navigator>
   )
 }
 
-export default HomeNavigator
+export default InfoRestaurantNaviguator
