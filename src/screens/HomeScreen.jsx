@@ -13,6 +13,11 @@ const restaurantsData = [
     rating: 4.5,
     distance: '1.2 km',
     tags: ['🥙 Kebabs', '🌱 Veggie'],
+    details: {
+      address: "12 rue de Berlin, Nantes",
+      hours: "11h30 - 22h",
+      seats: 8,
+    },
   },
   {
     id: 2,
@@ -23,6 +28,11 @@ const restaurantsData = [
     rating: 4.7,
     distance: '850 m',
     tags: ['🍕 Pizza', '🇮🇹 Italien'],
+    details: {
+      address: "5 avenue d'Italie, Nantes",
+      hours: "12h - 23h",
+      seats: 3,
+    },
   },
   {
     id: 3,
@@ -33,6 +43,11 @@ const restaurantsData = [
     rating: 4.3,
     distance: '1.5 km',
     tags: ['🇯🇵 Japonais', '🍱 Bento', '👌 Healthy'],
+    details: {
+      address: "18 rue du Soleil Levant, Nantes",
+      hours: "11h - 21h",
+      seats: 12,
+    },
   },
   {
     id: 4,
@@ -43,6 +58,11 @@ const restaurantsData = [
     rating: 4.6,
     distance: '900 m',
     tags: ['🌱 Vegan', '👌 Healthy'],
+    details: {
+      address: "2 place du Marché, Nantes",
+      hours: "10h - 20h",
+      seats: 5,
+    },
   },
   {
     id: 5,
@@ -53,6 +73,11 @@ const restaurantsData = [
     rating: 4.2,
     distance: '1.1 km',
     tags: ['🌮 Tacos', '🍟 Street Food'],
+    details: {
+      address: "7 rue des Tacos, Nantes",
+      hours: "11h - 23h",
+      seats: 2,
+    },
   },
   {
     id: 6,
@@ -63,6 +88,11 @@ const restaurantsData = [
     rating: 4.8,
     distance: '1.3 km',
     tags: ['🇹🇭 Thaï', '🌶️ Épicé'],
+    details: {
+      address: "3 rue de Bangkok, Nantes",
+      hours: "12h - 22h",
+      seats: 6,
+    },
   },
   {
     id: 7,
@@ -73,6 +103,11 @@ const restaurantsData = [
     rating: 4.4,
     distance: '1.0 km',
     tags: ['🍔 Burger', '👨‍🍳 Fait maison'],
+    details: {
+      address: "9 avenue du Burger, Nantes",
+      hours: "11h30 - 22h30",
+      seats: 10,
+    },
   },
   {
     id: 8,
@@ -83,6 +118,11 @@ const restaurantsData = [
     rating: 4.6,
     distance: '1.6 km',
     tags: ['🇲🇦 Couscous', '🧆 Oriental'],
+    details: {
+      address: "15 rue du Maghreb, Nantes",
+      hours: "12h - 23h",
+      seats: 4,
+    },
   },
 ];
 
@@ -93,7 +133,7 @@ const filtersData = [
   },
   {
     label: 'Nombre de personnes',
-    options: ['Tous', '1', '2', '3+', 'Groupe'],
+    options: ['Tous', '1 personne', '2 personnes', '+3 personnes', '+10 personnes'],
   },
   {
     label: 'Type de restaurant',
@@ -105,65 +145,6 @@ const filtersData = [
   },
 ];
 
-function getRestaurantDetails(id) {
-  switch (id) {
-    case 1:
-      return {
-        address: "12 rue de Berlin, Nantes",
-        hours: "11h30 - 22h",
-        seats: 8,
-      };
-    case 2:
-      return {
-        address: "5 avenue d'Italie, Nantes",
-        hours: "12h - 23h",
-        seats: 3,
-      };
-    case 3:
-      return {
-        address: "18 rue du Soleil Levant, Nantes",
-        hours: "11h - 21h",
-        seats: 12,
-      };
-    case 4:
-      return {
-        address: "2 place du Marché, Nantes",
-        hours: "10h - 20h",
-        seats: 5,
-      };
-    case 5:
-      return {
-        address: "7 rue des Tacos, Nantes",
-        hours: "11h - 23h",
-        seats: 2,
-      };
-    case 6:
-      return {
-        address: "3 rue de Bangkok, Nantes",
-        hours: "12h - 22h",
-        seats: 6,
-      };
-    case 7:
-      return {
-        address: "9 avenue du Burger, Nantes",
-        hours: "11h30 - 22h30",
-        seats: 10,
-      };
-    case 8:
-      return {
-        address: "15 rue du Maghreb, Nantes",
-        hours: "12h - 23h",
-        seats: 4,
-      };
-    default:
-      return {
-        address: "Adresse inconnue",
-        hours: "Horaires inconnus",
-        seats: 0,
-      };
-  }
-}
-
 function filterRestaurants(restaurants, selectedFilters) {
   return restaurants.filter((restaurant) => {
     // Prix
@@ -171,6 +152,14 @@ function filterRestaurants(restaurants, selectedFilters) {
     if (prix === "Moins de 10€" && restaurant.price >= 10) return false;
     if (prix === "10-12€" && (restaurant.price < 10 || restaurant.price > 12)) return false;
     if (prix === "Plus de 12€" && restaurant.price <= 12) return false;
+
+    const seats = selectedFilters[1];
+    if (seats === "1 personne" && restaurant.details.seats < 1) return false;
+    if (seats === "2 personnes" && restaurant.details.seats < 2) return false;
+    if (seats === "+3 personnes" && restaurant.details.seats < 3) return false;
+    if (seats === "+10 personnes" && restaurant.details.seats < 10) return false;
+
+    console.log(seats, restaurant.details.seats);
 
     // Type de restaurant
     const type = selectedFilters[2];
@@ -199,7 +188,7 @@ function HomeScreen() {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-        <Text style={styles.header}>Bienvenue utilisateur !</Text>
+        <Text style={styles.header}>Bienvenue !</Text>
         <View style={[styles.filtersRow, { overflow: 'visible', zIndex: 100 }]}>
           <ScrollView
             horizontal
@@ -221,17 +210,14 @@ function HomeScreen() {
         </View>
         <FlatList
           data={filteredRestaurants}
-          renderItem={({ item }) => {
-            const details = getRestaurantDetails(item.id);
-            return (
-              <RestaurantCard
-                restaurant={item}
-                address={details.address}
-                hours={details.hours}
-                seats={details.seats}
-              />
-            );
-          }}
+          renderItem={({ item }) => (
+            <RestaurantCard
+              restaurant={item}
+              address={item.details.address}
+              hours={item.details.hours}
+              seats={item.details.seats}
+            />
+          )}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={
