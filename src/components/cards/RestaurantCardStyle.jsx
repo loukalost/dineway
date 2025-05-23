@@ -4,10 +4,12 @@ export default StyleSheet.create({
   // Card styles
   card: {
     flexDirection: 'row',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
+    borderWidth: 2,
+    borderColor: '#f5f5f5',
   },
   image: {
     width: 70,
@@ -64,7 +66,7 @@ export default StyleSheet.create({
     padding: 8,
   },
   buttonInfo: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   buttonClose: {
     backgroundColor: '#fff',
