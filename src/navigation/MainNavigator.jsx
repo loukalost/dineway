@@ -7,6 +7,9 @@ import ReservationsNavigator from './ReservationsNavigator'
 import InfoRestaurantNavigator from './InfoRestaurantNavigator'
 import ChoiceRoleNavigator from './ChoiceRoleNavigator'
 import { RoleContext } from '../context/RoleContext'
+import RestaurantLoginPage from '../screens/LoginScreen'
+import RegisterPage from '../screens/RegisterScreen'
+import RestaurantReservationScreen from '../screens/RestaurantReservationScreen'
 
 const Tabs = createBottomTabNavigator()
 
@@ -32,7 +35,9 @@ function MainNavigator() {
       ) : (
         <>
           <Tabs.Screen name='Home' component={HomeNavigator} />
-          <Tabs.Screen name='Info restaurant' component={InfoRestaurantNavigator} />
+          <Tabs.Screen name='Register' component={RegisterPage} />
+          <Tabs.Screen name='Login' component={RestaurantLoginPage} />
+          <Tabs.Screen name='RestaurantReservation' component={RestaurantReservationScreen} />
         </>
       )}
     </Tabs.Navigator>
