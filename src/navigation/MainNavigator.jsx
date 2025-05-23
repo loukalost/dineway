@@ -24,6 +24,7 @@ function MainNavigator(role) {
         <>
           <Tabs.Screen name='Home' component={HomeNavigator} />
           <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
+          <Tabs.Screen name='Info restaurant' component={InfoRestaurantNavigator} />
         </>
       )}
     </Tabs.Navigator>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import MapView, { Callout, Marker } from 'react-native-maps'
-import { Picker } from '@react-native-picker/picker' // Correction ici
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import MapView, { Callout, Marker } from 'react-native-maps';
+import { Picker } from '@react-native-picker/picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const data = {
   restaurant: {
@@ -29,7 +30,7 @@ const data = {
       image: 'https://media.istockphoto.com/id/1150368715/fr/photo/cuisse-de-canard-confite.jpg?s=612x612&w=0&k=20&c=4i4_SjiNIIp9bhoSeRm47wjRXFPntasqZw5_x4x0oIw='
     })
   }
-}
+};
 
 const MenuSection = ({ title, items }) => (
   <View style={styles.section}>
@@ -53,7 +54,6 @@ const MenuSection = ({ title, items }) => (
             <Callout tooltip={true}>
               <View style={styles.calloutContainer}>
                 <Text style={styles.calloutText}>Restaurant italien</Text>
-                {/*<Button>Voir la carte du restaurant</Button>*/}
               </View>
             </Callout>
           </Marker>
@@ -63,11 +63,19 @@ const MenuSection = ({ title, items }) => (
       </View>
     ))}
   </View>
-)
+);
 
 export default function InfoRestaurantScreen() {
-  const { restaurant, carte } = data
-  const [selectedPeople, setSelectedPeople] = useState(3)
+  const { restaurant, carte } = data;
+  const [selectedPeople, setSelectedPeople] = useState(3);
+  const [time, setTime] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+
+  const onTimeChange = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
+    setShowTimePicker(false);
+    setTime(currentTime);
+  };
 
   return (
     <View style={styles.container}>
@@ -102,7 +110,6 @@ export default function InfoRestaurantScreen() {
                 <Callout tooltip={true}>
                   <View style={styles.calloutContainer}>
                     <Text style={styles.calloutText}>Restaurant italien</Text>
-                    {/*<Button>Voir la carte du restaurant</Button>*/}
                   </View>
                 </Callout>
               </Marker>
@@ -116,28 +123,39 @@ export default function InfoRestaurantScreen() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity style={styles.footerBtn}>
+        <View style={styles.pickerContainer}>
           <Picker
             selectedValue={selectedPeople}
             style={styles.picker}
             onValueChange={(itemValue) => setSelectedPeople(itemValue)}
             mode="dropdown"
           >
-            {Array.from({ length: 7 }, (_, i) => i + 2).map((num) => (
-              <Picker.Item key={num} label={`${num} personnes`} value={num} />
+            {[...Array(10)].map((_, i) => (
+              <Picker.Item key={i + 1} label={`${i + 1} personne${i + 1 > 1 ? 's' : ''}`} value={i + 1} />
             ))}
           </Picker>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.footerBtn}>
-          {/*<Icon name="time-outline" size={18} />*/}
-          <Text style={styles.footerText}>22:50</Text>
+        </View>
+
+
+        <TouchableOpacity style={styles.footerBtn} onPress={() => setShowTimePicker(true)}>
+          <Text style={styles.footerText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.validateBtn}>
           <Text style={styles.validateText}>Valider</Text>
         </TouchableOpacity>
       </View>
+
+      {showTimePicker && (
+        <DateTimePicker
+          value={time}
+          mode="time"
+          is24Hour={true}
+          display="default"
+          onChange={onTimeChange}
+        />
+      )}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -164,7 +182,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   mapText: { fontWeight: 'bold', fontSize: 16 },
-  section: { backgroundColor: '#fafafa', padding: 12, borderRadius: 8 },
+  section: { backgroundColor: '#fafafa', padding: 12, borderRadius: 8, marginTop: 10 },
   sectionTitle: { fontWeight: 'bold', fontSize: 16, marginBottom: 8 },
   item: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
   itemImage: { width: 40, height: 40, borderRadius: 20, marginRight: 8 },
@@ -198,16 +216,17 @@ const styles = StyleSheet.create({
     borderRadius: 8
   },
   validateText: { color: '#fff', fontWeight: 'bold' },
-  footerPicker: {
-    flex: 1,
-    justifyContent: 'center',
+  pickerContainer: {
     backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-    marginHorizontal: 5
+    borderRadius: 5,
+    width: 120,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   picker: {
-    height: 40,
-    width: '20%',
-    color: '#333'
-  }
-})
+    width: '100%',
+    color: '#333',
+    fontSize: 14,
+  },
+});
