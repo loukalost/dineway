@@ -195,16 +195,12 @@ function HomeScreen() {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
-<<<<<<< Updated upstream
-        <Text style={styles.header}>Bienvenue !</Text>
-=======
         <View style={styles.header}>
           <Text style={styles.headerText}>Bienvenue !</Text>
           <TouchableOpacity onPress={handleLogout} >
             <MaterialIcons name="logout" size={24} color="black" />
           </TouchableOpacity>
         </View>
->>>>>>> Stashed changes
         <View style={[styles.filtersRow, { overflow: 'visible', zIndex: 100 }]}>
           <ScrollView
             horizontal
