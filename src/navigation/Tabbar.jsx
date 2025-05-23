@@ -5,7 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 
 const icon = {
   Home: 'home-filled',
-  Surprise: 'casino', // exemple d'icône MaterialIcons
+  Surprise: 'casino',
   Reservations: 'table-restaurant',
 }
 

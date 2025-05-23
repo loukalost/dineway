@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator()
 function ReservationsNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Reservations' component={ReservationsScreen} />
+      <Stack.Screen name='Reservations' component={ReservationsScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }

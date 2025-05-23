@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator()
 function SurpriseNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Surprise' component={SurpriseScreen} />
+      <Stack.Screen name='Surprise' component={SurpriseScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   )
 }

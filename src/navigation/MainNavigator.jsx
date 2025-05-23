@@ -7,7 +7,7 @@ import InfoRestaurantNavigator from './InfoRestaurantNavigator'
 
 const Tabs = createBottomTabNavigator()
 
-function MainNavigator({ role }) {
+function MainNavigator(role) {
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}
@@ -22,6 +22,7 @@ function MainNavigator({ role }) {
         </>
       ) : (
         <>
+          <Tabs.Screen name='Home' component={HomeNavigator} />
           <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
         </>
       )}
