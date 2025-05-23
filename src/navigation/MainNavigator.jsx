@@ -1,13 +1,22 @@
+import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import MyTabBar from './Tabbar'
 import HomeNavigator from './HomeNavigator'
 import SurpriseNavigator from './SurpriseNavigator'
 import ReservationsNavigator from './ReservationsNavigator'
 import InfoRestaurantNavigator from './InfoRestaurantNavigator'
+import ChoiceRoleNavigator from './ChoiceRoleNavigator'
+import { RoleContext } from '../context/RoleContext'
 
 const Tabs = createBottomTabNavigator()
 
-function MainNavigator(role) {
+function MainNavigator() {
+  const { role } = useContext(RoleContext)
+
+  if (!role) {
+    return <ChoiceRoleNavigator />
+  }
+
   return (
     <Tabs.Navigator
       screenOptions={{ headerShown: false }}
@@ -23,7 +32,6 @@ function MainNavigator(role) {
       ) : (
         <>
           <Tabs.Screen name='Home' component={HomeNavigator} />
-          <Tabs.Screen name='Reservations' component={ReservationsNavigator} />
           <Tabs.Screen name='Info restaurant' component={InfoRestaurantNavigator} />
         </>
       )}

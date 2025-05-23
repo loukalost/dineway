@@ -1,15 +1,15 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeScreen from '../screens/HomeScreen'
+import ChoiceRoleScreen from '../screens/ChoiceRoleScreen'
 
 const Stack = createNativeStackNavigator()
 
-function HomeNavigator() {
+function ChoiceRoleNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen name="ChoiceRole" component={ChoiceRoleScreen} />
     </Stack.Navigator>
   )
 }
 
-export default HomeNavigator
+export default ChoiceRoleNavigator

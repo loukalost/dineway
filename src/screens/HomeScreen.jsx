@@ -1,7 +1,9 @@
-import { StyleSheet, View, Dimensions, Text, FlatList, ScrollView } from 'react-native'
+import { StyleSheet, View, Dimensions, Text, FlatList, ScrollView, TouchableOpacity } from 'react-native'
 import RestaurantCard from '../components/cards/RestaurantCard';
-import { useEffect, useState } from 'react';
+import { useContext, useState } from 'react'
 import HomeFilter from '../components/filters/HomeFilter';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { RoleContext } from '../context/RoleContext'
 
 const restaurantsData = [
   {
@@ -185,10 +187,24 @@ function HomeScreen() {
   const [selectedFilters, setSelectedFilters] = useState(Array(filtersData.length).fill('Tous'));
   const filteredRestaurants = filterRestaurants(restaurantsData, selectedFilters);
 
+  const { clearRole } = useContext(RoleContext)
+  const handleLogout = async () => {
+    await clearRole()
+  }
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container}>
+<<<<<<< Updated upstream
         <Text style={styles.header}>Bienvenue !</Text>
+=======
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Bienvenue !</Text>
+          <TouchableOpacity onPress={handleLogout} >
+            <MaterialIcons name="logout" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+>>>>>>> Stashed changes
         <View style={[styles.filtersRow, { overflow: 'visible', zIndex: 100 }]}>
           <ScrollView
             horizontal
@@ -241,6 +257,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerText: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 16,

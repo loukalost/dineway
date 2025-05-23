@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { RoleContext } from '../context/RoleContext'
 
-const ChoixRole = ({ setInitialRoute }) => {
-  const handleChoice = async (role) => {
-    await AsyncStorage.setItem('userRole', role)
-    setInitialRoute(role)
+const ChoiceRoleScreen = () => {
+  const { setRole } = useContext(RoleContext)
+
+  const handleChoice = async (selectedRole) => {
+    await AsyncStorage.setItem('userRole', selectedRole)
+    setRole(selectedRole)
   }
 
   return (
@@ -40,4 +43,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default ChoixRole
+export default ChoiceRoleScreen
