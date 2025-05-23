@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 const restaurantsData = [
   {
+    id: 1,
     name: 'Le Berliner',
     description: 'Délicieux kebabs berlinois faits maison.',
     price: 10,
@@ -13,6 +14,7 @@ const restaurantsData = [
     tags: ['🥙 Kebabs', '🌱 Veggie'],
   },
   {
+    id: 2,
     name: 'Pizza Mamma',
     description: 'Pizzas traditionnelles au feu de bois.',
     price: 12,
@@ -22,6 +24,7 @@ const restaurantsData = [
     tags: ['🍕 Pizza', '🇮🇹 Italien'],
   },
   {
+    id: 3,
     name: 'Tokyo Bento',
     description: 'Cuisine japonaise rapide et fraîche.',
     price: 9,
@@ -31,6 +34,7 @@ const restaurantsData = [
     tags: ['🇯🇵 Japonais', '🍱 Bento', '👌 Healthy'],
   },
   {
+    id: 4,
     name: 'Green Bowl',
     description: 'Bols végétariens et vegan gourmands.',
     price: 11,
@@ -40,6 +44,7 @@ const restaurantsData = [
     tags: ['🌱 Vegan', '👌 Healthy'],
   },
   {
+    id: 5,
     name: 'Le Tacos du Coin',
     description: 'Tacos épicés et croustillants.',
     price: 8,
@@ -49,6 +54,7 @@ const restaurantsData = [
     tags: ['🌮 Tacos', '🍟 Street Food'],
   },
   {
+    id: 6,
     name: 'Maison Thaï',
     description: 'Spécialités thaïlandaises savoureuses.',
     price: 13,
@@ -58,6 +64,7 @@ const restaurantsData = [
     tags: ['🇹🇭 Thaï', '🌶️ Épicé'],
   },
   {
+    id: 7,
     name: 'Burger Factory',
     description: 'Burgers artisanaux et frites maison.',
     price: 10,
@@ -67,6 +74,7 @@ const restaurantsData = [
     tags: ['🍔 Burger', '👨‍🍳 Fait maison'],
   },
   {
+    id: 8,
     name: 'Couscous Royal',
     description: 'Cuisine maghrébine traditionnelle.',
     price: 11,
@@ -99,13 +107,82 @@ function HomeScreen() {
         </View>
         <FlatList
           data={restaurantsData}
-          renderItem={({ item }) => <RestaurantCard restaurant={item} />}
+          renderItem={({ item }) => {
+            const details = getRestaurantDetails(item.id);
+            return (
+              <RestaurantCard
+                restaurant={item}
+                address={details.address}
+                hours={details.hours}
+                seats={details.seats}
+              />
+            );
+          }}
           keyExtractor={(item, index) => index.toString()}
           contentContainerStyle={{ paddingBottom: 100 }}
         />
       </View>
     </View>
   );
+}
+
+function getRestaurantDetails(id) {
+  switch (id) {
+    case 1:
+      return {
+        address: "12 rue de Berlin, Nantes",
+        hours: "11h30 - 22h",
+        seats: 8,
+      };
+    case 2:
+      return {
+        address: "5 avenue d'Italie, Nantes",
+        hours: "12h - 23h",
+        seats: 3,
+      };
+    case 3:
+      return {
+        address: "18 rue du Soleil Levant, Nantes",
+        hours: "11h - 21h",
+        seats: 12,
+      };
+    case 4:
+      return {
+        address: "2 place du Marché, Nantes",
+        hours: "10h - 20h",
+        seats: 5,
+      };
+    case 5:
+      return {
+        address: "7 rue des Tacos, Nantes",
+        hours: "11h - 23h",
+        seats: 2,
+      };
+    case 6:
+      return {
+        address: "3 rue de Bangkok, Nantes",
+        hours: "12h - 22h",
+        seats: 6,
+      };
+    case 7:
+      return {
+        address: "9 avenue du Burger, Nantes",
+        hours: "11h30 - 22h30",
+        seats: 10,
+      };
+    case 8:
+      return {
+        address: "15 rue du Maghreb, Nantes",
+        hours: "12h - 23h",
+        seats: 4,
+      };
+    default:
+      return {
+        address: "Adresse inconnue",
+        hours: "Horaires inconnus",
+        seats: 0,
+      };
+  }
 }
 
 const styles = StyleSheet.create({

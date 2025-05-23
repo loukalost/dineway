@@ -55,26 +55,35 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
+    alignItems: 'flex-start',
     elevation: 5,
   },
   button: {
     borderRadius: 20,
-    padding: 10,
+    padding: 8,
   },
-  buttonOpen: {
+  buttonInfo: {
     backgroundColor: '#f5f5f5',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#fff',
+    color: '#444',
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   textStyle: {
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  modalTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginBottom: 10,
+  },
   modalText: {
-    marginBottom: 15,
+    marginBottom: 10,
     textAlign: 'center',
   },
 });
