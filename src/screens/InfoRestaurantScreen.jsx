@@ -3,6 +3,7 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'rea
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+// import data from '../data/restaurant.json'
 
 const data = {
   restaurant: {
@@ -32,6 +33,7 @@ const data = {
   }
 };
 
+// console.log(data)
 const MenuSection = ({ title, items }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>

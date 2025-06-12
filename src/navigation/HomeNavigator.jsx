@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
 import HomeRestaurantScreen from '../screens/HomeRestaurantScrenn'
 import { RoleContext } from '../context/RoleContext'
+import InfoRestaurantScreen from '../screens/InfoRestaurantScreen'
 
 const Stack = createNativeStackNavigator()
 function HomeNavigator() {
@@ -13,6 +14,7 @@ function HomeNavigator() {
       {role === 'utilisateur' ? (
         <>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="InfoRestaurant" component={InfoRestaurantScreen}  />
         </>
       ) : (
         <>

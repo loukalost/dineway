@@ -1,15 +1,22 @@
-import { Image, Modal, Pressable, Text, View } from "react-native"
-import styles from './RestaurantCardStyle'
-import Icon from '@expo/vector-icons/MaterialIcons'
-import { use, useEffect, useState } from "react";
+import { Image, Modal, Pressable, Text, View, TouchableOpacity } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import styles from './RestaurantCardStyle';
+import Icon from '@expo/vector-icons/MaterialIcons';
+import { useEffect, useState } from "react";
 
 const RestaurantCard = ({ restaurant, address, hours, seats }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
-  }, [modalVisible])
+  }, [modalVisible]);
+
+  const handlePress = () => {
+    navigation.navigate('InfoRestaurant');
+  };
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={handlePress}>
       <Image source={typeof restaurant.image === 'string' ? { uri: restaurant.image } : restaurant.image} style={styles.image} />
       <View style={styles.content}>
         <View style={styles.rowSpace}>
@@ -42,7 +49,7 @@ const RestaurantCard = ({ restaurant, address, hours, seats }) => {
             <Icon name="info" size={20} />
           </Pressable>
         </View>
-        <Text style={styles.subtitle}>⭐ {restaurant.rating}  •  {restaurant.distance}</Text>
+        <Text style={styles.subtitle}>⭐ {restaurant.rating} • {restaurant.distance}</Text>
         <Text style={styles.description}>{restaurant.description}</Text>
         <Text style={styles.price}>{restaurant.price} €</Text>
         <View style={styles.tags}>
@@ -53,7 +60,8 @@ const RestaurantCard = ({ restaurant, address, hours, seats }) => {
           ))}
         </View>
       </View>
-    </View>
-  )
-}
-export default RestaurantCard
+    </TouchableOpacity>
+  );
+};
+
+export default RestaurantCard;
