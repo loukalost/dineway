@@ -5,6 +5,7 @@ import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 const MenuSection = ({ title, items }) => (
   <View style={styles.section}>
@@ -84,6 +85,9 @@ export default function InfoRestaurantScreen() {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={24} color="black" />
+      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
           <View style={styles.restaurantInfo}>
@@ -166,34 +170,75 @@ export default function InfoRestaurantScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
-  scroll: { padding: 16, paddingBottom: 100 },
-  header: { marginBottom: 16 },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 20,
+    left: 10,
+    zIndex: 10,
+  },
+  scroll: {
+    padding: 16,
+    paddingBottom: 100,
+  },
+  header: {
+    marginBottom: 16,
+  },
   restaurantInfo: {
     flexDirection: 'row',
     gap: 12,
-    marginBottom: 16
+    marginBottom: 16,
+    alignItems: 'center',
   },
   logoPlaceholder: {
     width: 64,
     height: 64,
     backgroundColor: '#ccc',
-    borderRadius: 8
+    borderRadius: 8,
   },
-  name: { fontWeight: 'bold', fontSize: 16 },
-  text: { color: '#333', fontSize: 12 },
+  name: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  text: {
+    color: '#333',
+    fontSize: 12,
+  },
   mapSize: {
     height: 180,
     borderRadius: 8,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
-  mapText: { fontWeight: 'bold', fontSize: 16 },
-  section: { backgroundColor: '#fafafa', padding: 12, borderRadius: 8, marginTop: 10 },
-  sectionTitle: { fontWeight: 'bold', fontSize: 16, marginBottom: 8 },
-  item: { flexDirection: 'row', alignItems: 'center', marginBottom: 8 },
-  itemImage: { width: 40, height: 40, borderRadius: 20, marginRight: 8 },
-  itemText: { fontSize: 14, flex: 1 },
+  section: {
+    backgroundColor: '#fafafa',
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 10,
+  },
+  sectionTitle: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  itemImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 8,
+  },
+  itemText: {
+    fontSize: 14,
+    flex: 1,
+  },
   footer: {
     position: 'absolute',
     bottom: 0,
@@ -205,7 +250,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#ddd',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   footerBtn: {
     flexDirection: 'row',
@@ -213,16 +258,21 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: '#f1f1f1',
     padding: 8,
-    borderRadius: 8
+    borderRadius: 8,
   },
-  footerText: { fontSize: 14 },
+  footerText: {
+    fontSize: 14,
+  },
   validateBtn: {
     backgroundColor: '#000',
     paddingHorizontal: 16,
     paddingVertical: 8,
-    borderRadius: 8
+    borderRadius: 8,
   },
-  validateText: { color: '#fff', fontWeight: 'bold' },
+  validateText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
   pickerContainer: {
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
