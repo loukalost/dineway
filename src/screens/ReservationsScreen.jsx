@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -52,12 +52,12 @@ const ReservationPage = () => {
       {reservationInfo ? (
         <>
           <View style={styles.restaurantInfo}>
-            <View style={styles.logoPlaceholder} />
+            <Image source={{ uri: reservationInfo.image }} style={styles.logoPlaceholder} />
             <View style={styles.restaurantDetails}>
               <Text style={styles.restaurantName}>{reservationInfo.restaurantName}</Text>
-              <Text style={styles.restaurantAddress}>3 Rue Racine, 44000 Nantes</Text>
+              <Text style={styles.restaurantAddress}>18 rue du soleil Levant, Nantes</Text>
               <View style={styles.restaurantTags}>
-                <Text style={styles.restaurantTag}>⭐ 4.2</Text>
+                <Text style={styles.restaurantTag}>⭐ {reservationInfo.rating}</Text>
               </View>
             </View>
           </View>

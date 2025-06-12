@@ -79,9 +79,12 @@ export default function InfoRestaurantScreen() {
       restaurantName: restaurant.name,
       numberOfPeople: selectedPeople,
       reservationCode: reservationCode,
+      adresse: restaurant.details.address,
+      image: restaurant.image,
+      rating: restaurant.rating,
       time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       date: formattedDate,
-      day: formattedDay,
+      day: formattedDay
     };
 
     try {
@@ -100,7 +103,7 @@ export default function InfoRestaurantScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         <View style={styles.header}>
           <View style={styles.restaurantInfo}>
-            <View style={styles.logoPlaceholder} />
+            <Image source={{ uri: restaurant.image }} style={styles.logoPlaceholder} />
             <View>
               <Text style={styles.name}>{restaurant.name}</Text>
               <Text style={styles.text}>{restaurant.details.address}</Text>
@@ -120,7 +123,7 @@ export default function InfoRestaurantScreen() {
               }}
             >
               <Marker
-                coordinate={{ latitude: 47.216671, longitude: -1.55 }}
+                coordinate={{ latitude: restaurant.coordinates.latitude, longitude: restaurant.coordinates.longitude }}
                 title={restaurant.name}
                 description={restaurant.description}
               >
