@@ -26,7 +26,7 @@ function MainNavigator() {
         <>
           <Tabs.Screen name="Home" component={HomeNavigator} />
           <Tabs.Screen name="Surprise" component={SurpriseNavigator} />
-          <Tabs.Screen name="Reservations" component={ReservationsNavigator} />
+          <Tabs.Screen name="ReservationsUser" component={ReservationsNavigator} />
         </>
       ) : (
         <>

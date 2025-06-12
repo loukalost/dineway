@@ -1,9 +1,8 @@
-import React from 'react';
-import { Image, Modal, Pressable, Text, View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { Image, Modal, Pressable, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './RestaurantCardStyle';
 import Icon from '@expo/vector-icons/MaterialIcons';
-import { useEffect, useState } from 'react';
 
 const RestaurantCard = ({ restaurant, address, hours, seats }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,7 +14,10 @@ const RestaurantCard = ({ restaurant, address, hours, seats }) => {
 
   return (
     <TouchableOpacity style={styles.card} onPress={handlePress}>
-      <Image source={typeof restaurant.image === 'string' ? { uri: restaurant.image } : restaurant.image} style={styles.image} />
+      <Image
+        source={typeof restaurant.image === 'string' ? { uri: restaurant.image } : restaurant.image}
+        style={styles.image}
+      />
       <View style={styles.content}>
         <View style={styles.rowSpace}>
           <Text style={styles.title}>{restaurant.name}</Text>
@@ -50,13 +52,15 @@ const RestaurantCard = ({ restaurant, address, hours, seats }) => {
         <Text style={styles.subtitle}>⭐ {restaurant.rating} • {restaurant.distance}</Text>
         <Text style={styles.description}>{restaurant.description}</Text>
         <Text style={styles.price}>{restaurant.price} €</Text>
-        <View style={styles.tags}>
-          {restaurant.tags?.map((tag, i) => (
-            <View key={i} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
-          ))}
-        </View>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.tagsContainer}>
+          <View style={styles.tags}>
+            {restaurant.tags?.map((tag, i) => (
+              <View key={i} style={styles.tag}>
+                <Text style={styles.tagText}>{tag}</Text>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </View>
     </TouchableOpacity>
   );

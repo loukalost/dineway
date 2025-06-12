@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MenuSection = ({ title, items }) => (
   <View style={styles.section}>
@@ -17,19 +18,68 @@ const MenuSection = ({ title, items }) => (
   </View>
 );
 
+const generateRandomCode = () => {
+  return Math.floor(1000 + Math.random() * 9000).toString();
+};
+
 export default function InfoRestaurantScreen() {
   const route = useRoute();
+  const navigation = useNavigation();
   const { restaurant } = route.params;
   const { carte } = restaurant;
 
   const [selectedPeople, setSelectedPeople] = useState(3);
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
+  const [hasReservation, setHasReservation] = useState(false);
+
+  useEffect(() => {
+    const checkExistingReservation = async () => {
+      try {
+        const existingReservation = await AsyncStorage.getItem('reservationInfo');
+        if (existingReservation !== null) {
+          setHasReservation(true);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la vérification de la réservation existante', error);
+      }
+    };
+
+    checkExistingReservation();
+  }, []);
+
+  useEffect(() => {
+    const now = new Date();
+    const defaultTime = new Date(now.getTime() + 30 * 60000); // Ajoute 30 minutes
+    setTime(defaultTime);
+  }, []);
 
   const onTimeChange = (event, selectedTime) => {
     const currentTime = selectedTime || time;
     setShowTimePicker(false);
     setTime(currentTime);
+  };
+
+  const handleValidate = async () => {
+    if (await AsyncStorage.getItem('reservationInfo')) {
+      Alert.alert('Réservation existante', 'Vous avez déjà une réservation.');
+      return;
+    }
+
+    const reservationCode = generateRandomCode();
+    const reservationInfo = {
+      restaurantName: restaurant.name,
+      numberOfPeople: selectedPeople,
+      reservationCode: reservationCode,
+      time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    };
+
+    try {
+      await AsyncStorage.setItem('reservationInfo', JSON.stringify(reservationInfo));
+      navigation.navigate('ReservationsUser');
+    } catch (error) {
+      console.error('Erreur lors de la sauvegarde des informations de réservation', error);
+    }
   };
 
   return (
@@ -84,8 +134,12 @@ export default function InfoRestaurantScreen() {
             onValueChange={(itemValue) => setSelectedPeople(itemValue)}
             mode="dropdown"
           >
-            {[...Array(10)].map((_, i) => (
-              <Picker.Item key={i + 1} label={`${i + 1} personne${i + 1 > 1 ? 's' : ''}`} value={i + 1} />
+            {[...Array(Math.min(restaurant.details.seats, 10))].map((_, i) => (
+              <Picker.Item
+                key={i + 1}
+                label={`${i + 1} personne${i + 1 > 1 ? 's' : ''}`}
+                value={i + 1}
+              />
             ))}
           </Picker>
         </View>
@@ -93,7 +147,7 @@ export default function InfoRestaurantScreen() {
         <TouchableOpacity style={styles.footerBtn} onPress={() => setShowTimePicker(true)}>
           <Text style={styles.footerText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.validateBtn}>
+        <TouchableOpacity style={styles.validateBtn} onPress={handleValidate}>
           <Text style={styles.validateText}>Valider</Text>
         </TouchableOpacity>
       </View>
@@ -183,4 +237,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-

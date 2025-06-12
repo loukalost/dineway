@@ -1,53 +1,79 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ReservationPage = () => {
+  const [reservationInfo, setReservationInfo] = useState(null);
+
+  const fetchReservationInfo = async () => {
+    try {
+      const info = await AsyncStorage.getItem('reservationInfo');
+      if (info !== null) {
+        setReservationInfo(JSON.parse(info));
+      }
+    } catch (error) {
+      console.error('Erreur lors de la récupération des informations de réservation', error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchReservationInfo();
+    }, [])
+  );
+
+  const handleCancel = async () => {
+    try {
+      await AsyncStorage.removeItem('reservationInfo');
+      setReservationInfo(null);
+      Alert.alert('Réservation annulée', 'Votre réservation a été annulée avec succès.');
+    } catch (error) {
+      console.error('Erreur lors de l\'annulation de la réservation', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.restaurantInfo}>
-        <View style={styles.logoPlaceholder} />
-        <View style={styles.restaurantDetails}>
-          <Text style={styles.restaurantName}>Le Berliner</Text>
-          <Text style={styles.restaurantAddress}>3 Rue Racine, 44000 Nantes</Text>
-          <View style={styles.restaurantTags}>
-            <Text style={styles.restaurantTag}>⭐ 4.2</Text>
-          </View>
-          <View style={styles.tags}>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>Poke</Text>
-            </View>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>Végétarien</Text>
-            </View>
-            <View style={styles.tag}>
-              <Text style={styles.tagText}>Froid</Text>
+      {reservationInfo ? (
+        <>
+          <View style={styles.restaurantInfo}>
+            <View style={styles.logoPlaceholder} />
+            <View style={styles.restaurantDetails}>
+              <Text style={styles.restaurantName}>{reservationInfo.restaurantName}</Text>
+              <Text style={styles.restaurantAddress}>3 Rue Racine, 44000 Nantes</Text>
+              <View style={styles.restaurantTags}>
+                <Text style={styles.restaurantTag}>⭐ 4.2</Text>
+              </View>
             </View>
           </View>
-        </View>
-      </View>
 
-      <View style={styles.reservationDetails}>
-        <View style={styles.tags}>
-          <Text style={styles.tag}>🥙 Kebabs</Text>
-          <Text style={styles.tag}>🌱 Veggie</Text>
-        </View>
-      </View>
-      <View style={styles.reservationDetails}>
-        <View style={styles.tags}>
-          <Text style={styles.tag}>3 personnes</Text>
-          <Text style={styles.tag}>21:40</Text>
-        </View>
-      </View>
-      <View style={styles.codeContainer}>
-        <Text style={styles.codeLabel}>Code</Text>
-        <View style={styles.codeBox}>
-          <Text style={styles.codeText}>1944</Text>
-        </View>
-      </View>
+          <View style={styles.reservationDetails}>
+            <View style={styles.tags}>
+              <Text style={styles.tag}>🥙 Kebabs</Text>
+              <Text style={styles.tag}>🌱 Veggie</Text>
+            </View>
+          </View>
+          <View style={styles.reservationDetails}>
+            <View style={styles.tags}>
+              <Text style={styles.tag}>{reservationInfo.numberOfPeople} personnes</Text>
+              <Text style={styles.tag}>{reservationInfo.time}</Text>
+            </View>
+          </View>
+          <View style={styles.codeContainer}>
+            <Text style={styles.codeLabel}>Code</Text>
+            <View style={styles.codeBox}>
+              <Text style={styles.codeText}>{reservationInfo.reservationCode}</Text>
+            </View>
+          </View>
 
-      <TouchableOpacity style={styles.cancelButton}>
-        <Text style={styles.cancelButtonText}>Annuler réservation</Text>
-      </TouchableOpacity>
+          <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+            <Text style={styles.cancelButtonText}>Annuler réservation</Text>
+          </TouchableOpacity>
+        </>
+      ) : (
+        <Text style={styles.noReservationText}>Pas de réservation</Text>
+      )}
     </View>
   );
 };
@@ -153,6 +179,11 @@ const styles = StyleSheet.create({
   },
   tagText: {
     fontSize: 12,
+  },
+  noReservationText: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 
