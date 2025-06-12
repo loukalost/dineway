@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react'
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { RoleContext } from '../context/RoleContext'
 
 const data = [
   { id: '1', people: '3 personnes', time: '22:50', status: 'En attente de validation' },

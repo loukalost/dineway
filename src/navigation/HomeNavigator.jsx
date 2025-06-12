@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import HomeScreen from '../screens/HomeScreen'
+import HomeRestaurantScreen from '../screens/HomeRestaurantScrenn'
+import { RoleContext } from '../context/RoleContext'
 
 const Stack = createNativeStackNavigator()
-
 function HomeNavigator() {
+  const { role } = useContext(RoleContext)
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeScreen" component={HomeScreen} />
+      {role === 'utilisateur' ? (
+        <>
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name='HomeRestaurant' component={HomeRestaurantScreen} />
+        </>
+      )}
     </Stack.Navigator>
   )
 }

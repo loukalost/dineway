@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native'
 
 const RestaurantLoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigation = useNavigation();
+
   const handleLogin = () => {
-    // Logique pour gérer la connexion
     console.log({
       email,
       password,
@@ -43,7 +45,7 @@ const RestaurantLoginPage = () => {
         <Text style={styles.buttonText}>Valider</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.link}>
+      <TouchableOpacity style={styles.link} onPress={() => navigation.navigate('Register')}>
         <Text style={styles.linkText}>Première connexion</Text>
       </TouchableOpacity>
     </View>

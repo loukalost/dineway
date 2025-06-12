@@ -7,8 +7,6 @@ const RestaurantCard = ({ restaurant, address, hours, seats }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    console.log(modalVisible)
-
   }, [modalVisible])
   return (
     <View style={styles.card}>

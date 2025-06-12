@@ -161,8 +161,6 @@ function filterRestaurants(restaurants, selectedFilters) {
     if (seats === "+3 personnes" && restaurant.details.seats < 3) return false;
     if (seats === "+10 personnes" && restaurant.details.seats < 10) return false;
 
-    console.log(seats, restaurant.details.seats);
-
     // Type de restaurant
     const type = selectedFilters[2];
     if (
