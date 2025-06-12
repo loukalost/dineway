@@ -1,18 +1,16 @@
-import { Image, Modal, Pressable, Text, View, TouchableOpacity } from "react-native";
+import React from 'react';
+import { Image, Modal, Pressable, Text, View, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './RestaurantCardStyle';
 import Icon from '@expo/vector-icons/MaterialIcons';
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 const RestaurantCard = ({ restaurant, address, hours, seats }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
 
-  useEffect(() => {
-  }, [modalVisible]);
-
   const handlePress = () => {
-    navigation.navigate('InfoRestaurant');
+    navigation.navigate('InfoRestaurant', { restaurant });
   };
 
   return (

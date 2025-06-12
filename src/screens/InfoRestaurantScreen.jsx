@@ -3,63 +3,13 @@ import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'rea
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
-// import data from '../data/restaurant.json'
+import { useRoute } from '@react-navigation/native';
 
-const data = {
-  restaurant: {
-    name: 'Le Berliner',
-    address: '3 Rue Racine, 44000 Nantes',
-    rating: 4.2,
-    distance: '350m',
-    remainingPlaces: 'x places restantes',
-    tags: 'Poke - Végétarien - Froid'
-  },
-  carte: {
-    entrees: new Array(4).fill({
-      title: 'Le Lorem Ipsum est simplement du faux',
-      price: '18 €',
-      image: 'https://media.istockphoto.com/id/1150368715/fr/photo/cuisse-de-canard-confite.jpg?s=612x612&w=0&k=20&c=4i4_SjiNIIp9bhoSeRm47wjRXFPntasqZw5_x4x0oIw='
-    }),
-    plats: new Array(4).fill({
-      title: 'Le Lorem Ipsum est simplement du faux',
-      price: '18 €',
-      image: 'https://media.istockphoto.com/id/1150368715/fr/photo/cuisse-de-canard-confite.jpg?s=612x612&w=0&k=20&c=4i4_SjiNIIp9bhoSeRm47wjRXFPntasqZw5_x4x0oIw='
-    }),
-    desserts: new Array(4).fill({
-      title: 'Le Lorem Ipsum est simplement du faux',
-      price: '18 €',
-      image: 'https://media.istockphoto.com/id/1150368715/fr/photo/cuisse-de-canard-confite.jpg?s=612x612&w=0&k=20&c=4i4_SjiNIIp9bhoSeRm47wjRXFPntasqZw5_x4x0oIw='
-    })
-  }
-};
-
-// console.log(data)
 const MenuSection = ({ title, items }) => (
   <View style={styles.section}>
     <Text style={styles.sectionTitle}>{title}</Text>
     {items.map((item, index) => (
       <View key={index} style={styles.item}>
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 47.216671,
-            longitude: -1.55,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{ latitude: 47.216671, longitude: -1.55 }}
-            title="Mon Marqueur"
-            description="Ceci est un exemple de callout personnalisé"
-          >
-            <Callout tooltip={true}>
-              <View style={styles.calloutContainer}>
-                <Text style={styles.calloutText}>Restaurant italien</Text>
-              </View>
-            </Callout>
-          </Marker>
-        </MapView>
         <Image source={{ uri: item.image }} style={styles.itemImage} />
         <Text style={styles.itemText}>{item.title} - {item.price}</Text>
       </View>
@@ -68,7 +18,10 @@ const MenuSection = ({ title, items }) => (
 );
 
 export default function InfoRestaurantScreen() {
-  const { restaurant, carte } = data;
+  const route = useRoute();
+  const { restaurant } = route.params;
+  const { carte } = restaurant;
+
   const [selectedPeople, setSelectedPeople] = useState(3);
   const [time, setTime] = useState(new Date());
   const [showTimePicker, setShowTimePicker] = useState(false);
@@ -82,16 +35,15 @@ export default function InfoRestaurantScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Info Restaurant */}
         <View style={styles.header}>
           <View style={styles.restaurantInfo}>
             <View style={styles.logoPlaceholder} />
             <View>
               <Text style={styles.name}>{restaurant.name}</Text>
-              <Text style={styles.text}>{restaurant.address}</Text>
+              <Text style={styles.text}>{restaurant.details.address}</Text>
               <Text style={styles.text}>⭐ {restaurant.rating} · {restaurant.distance}</Text>
-              <Text style={styles.text}>{restaurant.remainingPlaces}</Text>
-              <Text style={styles.text}>{restaurant.tags}</Text>
+              <Text style={styles.text}>{restaurant.details.seats} places restantes</Text>
+              <Text style={styles.text}>{restaurant.tags.join(', ')}</Text>
             </View>
           </View>
           <View>
@@ -106,12 +58,12 @@ export default function InfoRestaurantScreen() {
             >
               <Marker
                 coordinate={{ latitude: 47.216671, longitude: -1.55 }}
-                title="Mon Marqueur"
-                description="Ceci est un exemple de callout personnalisé"
+                title={restaurant.name}
+                description={restaurant.description}
               >
                 <Callout tooltip={true}>
                   <View style={styles.calloutContainer}>
-                    <Text style={styles.calloutText}>Restaurant italien</Text>
+                    <Text style={styles.calloutText}>{restaurant.name}</Text>
                   </View>
                 </Callout>
               </Marker>
@@ -137,7 +89,6 @@ export default function InfoRestaurantScreen() {
             ))}
           </Picker>
         </View>
-
 
         <TouchableOpacity style={styles.footerBtn} onPress={() => setShowTimePicker(true)}>
           <Text style={styles.footerText}>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</Text>
@@ -232,3 +183,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
+
