@@ -68,11 +68,20 @@ export default function InfoRestaurantScreen() {
     }
 
     const reservationCode = generateRandomCode();
+    const now = new Date();
+
+    const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+    const optionsDay = { weekday: 'long' };
+    const formattedDate = now.toLocaleDateString('fr-FR', optionsDate);
+    const formattedDay = now.toLocaleDateString('fr-FR', optionsDay);
+
     const reservationInfo = {
       restaurantName: restaurant.name,
       numberOfPeople: selectedPeople,
       reservationCode: reservationCode,
       time: time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      date: formattedDate,
+      day: formattedDay,
     };
 
     try {

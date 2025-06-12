@@ -1,33 +1,98 @@
-import React, { useContext, useState } from 'react'
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { RoleContext } from '../context/RoleContext'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const data = [
-  { id: '1', people: '3 personnes', time: '22:50', status: 'En attente de validation' },
-  { id: '2', people: '3 personnes', time: '22:50', status: 'En attente de validation' },
-  { id: '3', people: '3 personnes', time: '22:50', status: 'En attente du code', code: '1234' },
-  { id: '4', people: '3 personnes', time: '22:50', status: 'En attente du code', code: '5678' },
-];
+const formatDate = (date) => {
+  const optionsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+  const optionsTime = { hour: '2-digit', minute: '2-digit' };
+  return {
+    date: date.toLocaleDateString('fr-FR', optionsDate),
+    time: date.toLocaleTimeString('fr-FR', optionsTime),
+  };
+};
 
 const RestaurantReservationPage = () => {
   const [activeTab, setActiveTab] = useState('validation');
+  const [pendingReservations, setPendingReservations] = useState([]);
+  const [historyReservations, setHistoryReservations] = useState([]);
+
+  useEffect(() => {
+    const fetchReservationInfo = async () => {
+      try {
+        const pendingInfo = await AsyncStorage.getItem('reservationInfo');
+        const historyInfo = await AsyncStorage.getItem('reservationHistory');
+
+        if (pendingInfo !== null) {
+          setPendingReservations([JSON.parse(pendingInfo)]);
+        }
+
+        if (historyInfo !== null) {
+          const parsedHistory = JSON.parse(historyInfo);
+          parsedHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+          setHistoryReservations(parsedHistory);
+        }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des informations de réservation', error);
+      }
+    };
+
+    fetchReservationInfo();
+  }, []);
+
+  const handleValidate = async (reservation) => {
+    Alert.alert(
+      'Confirmation',
+      'Êtes-vous sûr que les clients sont bien arrivés ?',
+      [
+        {
+          text: 'Annuler',
+          style: 'cancel',
+        },
+        {
+          text: 'Oui',
+          onPress: async () => {
+            try {
+              const now = new Date();
+              const { date } = formatDate(now);
+
+              const updatedReservation = {
+                ...reservation,
+                date: date,
+              };
+
+              const updatedHistory = [...historyReservations, updatedReservation];
+              updatedHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+              await AsyncStorage.setItem('reservationHistory', JSON.stringify(updatedHistory));
+              await AsyncStorage.removeItem('reservationInfo');
+
+              setHistoryReservations(updatedHistory);
+              setPendingReservations([]);
+
+            } catch (error) {
+              console.error('Erreur lors de la validation de la réservation', error);
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.item}>
-      <Text style={styles.itemText}>N°5 :</Text>
-      <Text style={styles.itemText}>{item.people}</Text>
+      <Text style={styles.itemText}>{item.numberOfPeople} personnes</Text>
       <Text style={styles.itemText}>{item.time}</Text>
-      {activeTab === 'code' ? (
-        <Text style={styles.itemText}>{item.code}</Text>
-      ) : (
-        <Text style={styles.itemText}>-</Text>
+      {activeTab === 'code' && (
+        <>
+          <Text style={styles.itemText}>{item.date}</Text>
+          <Text style={styles.itemText}>{item.reservationCode}</Text>
+        </>
       )}
-      <TouchableOpacity style={styles.checkButton}>
-        <Text style={styles.checkButtonText}>✓</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.cancelButton}>
-        <Text style={styles.cancelButtonText}>X</Text>
-      </TouchableOpacity>
+      {activeTab === 'validation' && (
+        <TouchableOpacity style={styles.checkButton} onPress={() => handleValidate(item)}>
+          <Text style={styles.checkButtonText}>✓</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -38,7 +103,7 @@ const RestaurantReservationPage = () => {
         <View style={styles.restaurantInfo}>
           <Text style={styles.restaurantName}>Pokai By Sushi Shop</Text>
           <Text style={styles.restaurantDetails}>3 Rue Racine, 44000 Nantes</Text>
-          <Text style={styles.restaurantDetails}>⭐ 4.2 · 350m</Text>
+          <Text style={styles.restaurantDetails}>⭐ 4.2</Text>
           <Text style={styles.restaurantDetails}>8 places restantes</Text>
           <View style={styles.tags}>
             <Text style={styles.tag}>Kebabs</Text>
@@ -49,18 +114,34 @@ const RestaurantReservationPage = () => {
 
       <View style={styles.tabs}>
         <TouchableOpacity onPress={() => setActiveTab('validation')}>
-          <Text style={activeTab === 'validation' ? styles.activeTab : styles.tab}>En attente de validation</Text>
+          <Text style={activeTab === 'validation' ? styles.activeTab : styles.tab}>En attente de code</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setActiveTab('code')}>
-          <Text style={activeTab === 'code' ? styles.activeTab : styles.tab}>En attente du code</Text>
+          <Text style={activeTab === 'code' ? styles.activeTab : styles.tab}>Historique</Text>
         </TouchableOpacity>
       </View>
 
-      <FlatList
-        data={data.filter(item => item.status === (activeTab === 'validation' ? 'En attente de validation' : 'En attente du code'))}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-      />
+      {activeTab === 'validation' ? (
+        pendingReservations.length > 0 ? (
+          <FlatList
+            data={pendingReservations}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        ) : (
+          <Text style={styles.noReservationText}>Aucune réservation en attente de code</Text>
+        )
+      ) : (
+        historyReservations.length > 0 ? (
+          <FlatList
+            data={historyReservations}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        ) : (
+          <Text style={styles.noReservationText}>Aucune réservation dans l'historique</Text>
+        )
+      )}
     </View>
   );
 };
@@ -130,6 +211,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 14,
+    marginRight: 8,
   },
   checkButton: {
     backgroundColor: '#4CAF50',
@@ -154,6 +236,11 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  noReservationText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 20,
   },
 });
 

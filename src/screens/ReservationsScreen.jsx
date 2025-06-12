@@ -24,13 +24,27 @@ const ReservationPage = () => {
   );
 
   const handleCancel = async () => {
-    try {
-      await AsyncStorage.removeItem('reservationInfo');
-      setReservationInfo(null);
-      Alert.alert('Réservation annulée', 'Votre réservation a été annulée avec succès.');
-    } catch (error) {
-      console.error('Erreur lors de l\'annulation de la réservation', error);
-    }
+    Alert.alert(
+      'Annuler la réservation',
+      'Êtes-vous sûr de vouloir annuler cette réservation ?',
+      [
+        {
+          text: 'Non',
+          style: 'cancel',
+        },
+        {
+          text: 'Oui',
+          onPress: async () => {
+            try {
+              await AsyncStorage.removeItem('reservationInfo');
+              setReservationInfo(null);
+            } catch (error) {
+              console.error('Erreur lors de l\'annulation de la réservation', error);
+            }
+          },
+        },
+      ]
+    );
   };
 
   return (
