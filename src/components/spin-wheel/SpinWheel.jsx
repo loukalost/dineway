@@ -55,9 +55,12 @@ function SpinWheel({
       const finalAngle = (randomAngle % 360 + 360) % 360;
       rotation.setValue(finalAngle);
 
-      // Correction du calcul de l'index pointé par le triangle
-      const pointerAngle = ((finalAngle - offsetAngle + 360) % 360); // -finalAngle car la roue tourne dans le sens horaire
-      const selectedIndex = Math.round(pointerAngle / itemAngle) % sectorLength;
+      // CORRECTION : Le marqueur est en haut (à -90°), donc on doit ajuster le calcul
+      const normalizedAngle = (finalAngle + 90 + 360) % 360;
+      
+      // Trouver le secteur correspondant
+      const selectedIndex = Math.floor(normalizedAngle / itemAngle) % sectorLength;
+
       if (data[selectedIndex]) {
         onResult(data[selectedIndex]);
       }

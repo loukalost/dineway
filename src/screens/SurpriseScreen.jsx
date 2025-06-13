@@ -1,130 +1,8 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, Alert, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 import SpinWheel from '../components/spin-wheel/SpinWheel';
 import HomeFilter from '../components/filters/HomeFilter';
-
-const restaurantsData = [
-	{
-		id: 1,
-		name: 'Le Berliner',
-		description: 'Délicieux kebabs berlinois faits maison.',
-		price: 10,
-		// image: require("../../assets/img/kebab.png"),
-		rating: 4.5,
-		distance: '1.2 km',
-		tags: ['🥙 Kebabs', '🌱 Veggie'],
-		details: {
-			address: '12 rue de Berlin, Nantes',
-			hours: '11h30 - 22h',
-			seats: 8,
-		},
-	},
-	{
-		id: 2,
-		name: 'Pizza Mamma',
-		description: 'Pizzas traditionnelles au feu de bois.',
-		price: 12,
-		// image: require("../../assets/img/pizza.webp"),
-		rating: 4.7,
-		distance: '850 m',
-		tags: ['🍕 Pizza', '🇮🇹 Italien'],
-		details: {
-			address: "5 avenue d'Italie, Nantes",
-			hours: '12h - 23h',
-			seats: 3,
-		},
-	},
-	{
-		id: 3,
-		name: 'Tokyo Bento',
-		description: 'Cuisine japonaise rapide et fraîche.',
-		price: 9,
-		// image: require("../../assets/img/bento.png"),
-		rating: 4.3,
-		distance: '1.5 km',
-		tags: ['🇯🇵 Japonais', '🍱 Bento', '👌 Healthy'],
-		details: {
-			address: '18 rue du Soleil Levant, Nantes',
-			hours: '11h - 21h',
-			seats: 12,
-		},
-	},
-	{
-		id: 4,
-		name: 'Green Bowl',
-		description: 'Bols végétariens et vegan gourmands.',
-		price: 11,
-		// image: require("../../assets/img/greenbowl.jpg"),
-		rating: 4.6,
-		distance: '900 m',
-		tags: ['🌱 Vegan', '👌 Healthy'],
-		details: {
-			address: '2 place du Marché, Nantes',
-			hours: '10h - 20h',
-			seats: 5,
-		},
-	},
-	{
-		id: 5,
-		name: 'Le Tacos du Coin',
-		description: 'Tacos épicés et croustillants.',
-		price: 8,
-		// image: require("../../assets/img/tacos.webp"),
-		rating: 4.2,
-		distance: '1.1 km',
-		tags: ['🌮 Tacos', '🍟 Street Food'],
-		details: {
-			address: '7 rue des Tacos, Nantes',
-			hours: '11h - 23h',
-			seats: 2,
-		},
-	},
-	{
-		id: 6,
-		name: 'Maison Thaï',
-		description: 'Spécialités thaïlandaises savoureuses.',
-		price: 13,
-		// image: require("../../assets/img/thai.jpg"),
-		rating: 4.8,
-		distance: '1.3 km',
-		tags: ['🇹🇭 Thaï', '🌶️ Épicé'],
-		details: {
-			address: '3 rue de Bangkok, Nantes',
-			hours: '12h - 22h',
-			seats: 6,
-		},
-	},
-	{
-		id: 7,
-		name: 'Burger Factory',
-		description: 'Burgers artisanaux et frites maison.',
-		price: 10,
-		// image: require("../../assets/img/burger.webp"),
-		rating: 4.4,
-		distance: '1.0 km',
-		tags: ['🍔 Burger', '👨‍🍳 Fait maison'],
-		details: {
-			address: '9 avenue du Burger, Nantes',
-			hours: '11h30 - 22h30',
-			seats: 10,
-		},
-	},
-	{
-		id: 8,
-		name: 'Couscous Royal',
-		description: 'Cuisine maghrébine traditionnelle.',
-		price: 11,
-		// image: require("../../assets/img/couscous.jpeg"),
-		rating: 4.6,
-		distance: '1.6 km',
-		tags: ['🇲🇦 Couscous', '🧆 Oriental'],
-		details: {
-			address: '15 rue du Maghreb, Nantes',
-			hours: '12h - 23h',
-			seats: 4,
-		},
-	},
-];
+import restaurantsData from '../data/restaurant.json';
 
 const filtersData = [
 	{
@@ -176,10 +54,11 @@ function filterRestaurants(restaurants, selectedFilters) {
 	});
 }
 
-function SurpriseScreen() {
+function SurpriseScreen({ navigation }) {
 	const [spinCount, setSpinCount] = useState(10);
 	const [stateCode, setStateCode] = useState('pause');
-	const [resultValue, setResultValue] = useState(0);
+	const [resultValue, setResultValue] = useState(null);
+	const [modalVisible, setModalVisible] = useState(false);
 	const [selectedFilters, setSelectedFilters] = useState(Array(filtersData.length).fill('Tous'));
 	const filteredRestaurants = filterRestaurants(restaurantsData, selectedFilters);
 
@@ -191,7 +70,15 @@ function SurpriseScreen() {
 
 	const handleResult = (restaurant) => {
 		setResultValue(restaurant);
-		Alert.alert('Super !', `Vous êtes tombé sur le ${restaurant.name}`);
+		setModalVisible(true);
+	};
+
+	const handleGoToRestaurant = () => {
+		setModalVisible(false);
+		if (resultValue) {
+			// Remplace "RestaurantScreen" par le nom de ta page de détail restaurant
+			navigation.navigate('InfoRestaurantScreen', { restaurant: resultValue });
+		}
 	};
 
 	return (
@@ -226,9 +113,90 @@ function SurpriseScreen() {
 					onUpdate={(code) => setStateCode(code)}
 				/>
 			</View>
+
+			<Modal
+				visible={modalVisible}
+				transparent
+				animationType="slide"
+				onRequestClose={() => setModalVisible(false)}
+			>
+				<View style={modalStyles.overlay}>
+					<View style={modalStyles.modal}>
+						{resultValue && (
+							<>
+								<Text style={modalStyles.title}>Super !</Text>
+								<Text style={modalStyles.name}>{resultValue.name}</Text>
+								<Text style={modalStyles.desc}>{resultValue.description}</Text>
+								<Text style={modalStyles.info}>Prix : {resultValue.price} €</Text>
+								<Text style={modalStyles.info}>Adresse : {resultValue.details.address}</Text>
+								<Text style={modalStyles.info}>Horaires : {resultValue.details.hours}</Text>
+								<TouchableOpacity
+									style={modalStyles.button}
+									onPress={handleGoToRestaurant}
+								>
+									<Text style={modalStyles.buttonText}>Voir la fiche</Text>
+								</TouchableOpacity>
+								<TouchableOpacity
+									style={[modalStyles.button, { backgroundColor: '#ccc', marginTop: 8 }]}
+									onPress={() => setModalVisible(false)}
+								>
+									<Text style={[modalStyles.buttonText, { color: '#333' }]}>Fermer</Text>
+								</TouchableOpacity>
+							</>
+						)}
+					</View>
+				</View>
+			</Modal>
 		</View>
 	);
 }
+
+const modalStyles = StyleSheet.create({
+	overlay: {
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.4)',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	modal: {
+		backgroundColor: '#fff',
+		borderRadius: 16,
+		padding: 24,
+		width: '80%',
+		alignItems: 'center',
+	},
+	title: {
+		fontSize: 22,
+		fontWeight: 'bold',
+		marginBottom: 8,
+	},
+	name: {
+		fontSize: 18,
+		fontWeight: '600',
+		marginBottom: 4,
+	},
+	desc: {
+		fontSize: 14,
+		marginBottom: 8,
+		textAlign: 'center',
+	},
+	info: {
+		fontSize: 13,
+		marginBottom: 2,
+	},
+	button: {
+		marginTop: 16,
+		backgroundColor: '#111',
+		paddingVertical: 10,
+		paddingHorizontal: 24,
+		borderRadius: 8,
+	},
+	buttonText: {
+		color: '#fff',
+		fontWeight: 'bold',
+		fontSize: 15,
+	},
+});
 
 const styles = StyleSheet.create({
 	container: {

@@ -97,11 +97,13 @@ export default function InfoRestaurantScreen() {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={30} color="black" />
-      </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.headerText}>Infos restaurant</Text>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={30} color="black" />
+          </TouchableOpacity>
+          <Text style={styles.headerText}>Infos restaurant</Text>
+        </View>
         <View style={styles.header}>
           <View style={styles.restaurantInfo}>
             <Image source={{ uri: restaurant.image }} style={styles.logoPlaceholder} />
@@ -187,12 +189,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  backButton: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    zIndex: 10,
-  },
   scroll: {
     padding: 16,
     paddingBottom: 100,
@@ -204,6 +200,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     paddingBottom: 8,
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 16,
+    gap: 12,
   },
   restaurantInfo: {
     flexDirection: 'row',
