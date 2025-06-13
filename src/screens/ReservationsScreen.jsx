@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Image } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
@@ -49,6 +49,7 @@ const ReservationPage = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.headerText}>Mes réservations</Text>
       {reservationInfo ? (
         <>
           <View style={styles.restaurantInfo}>
@@ -59,31 +60,41 @@ const ReservationPage = () => {
               <View style={styles.restaurantTags}>
                 <Text style={styles.restaurantTag}>⭐ {reservationInfo.rating}</Text>
               </View>
-            </View>
-          </View>
+              <View style={styles.tags}>
+                <View style={styles.tag}>
+                  <Text style={styles.tagText}>Poke</Text>
+                </View>
+                <View style={styles.tag}>
+                  <Text style={styles.tagText}>Végétarien</Text>
+                </View>
+                <View style={styles.tag}>
+                  <Text style={styles.tagText}>Froid</Text>
+                </View>
+              </View>
 
-          <View style={styles.reservationDetails}>
-            <View style={styles.tags}>
-              <Text style={styles.tag}>🥙 Kebabs</Text>
-              <Text style={styles.tag}>🌱 Veggie</Text>
+              <View style={styles.reservationDetails}>
+                <View style={styles.tags}>
+                  <Text style={styles.tag}>🥙 Kebabs</Text>
+                  <Text style={styles.tag}>🌱 Veggie</Text>
+                </View>
+              </View>
+              <View style={styles.reservationDetails}>
+                <View style={styles.tags}>
+                  <Text style={styles.tag}>{reservationInfo.numberOfPeople} personnes</Text>
+                  <Text style={styles.tag}>{reservationInfo.time}</Text>
+                </View>
+              </View>
+              <View style={styles.codeContainer}>
+                <Text style={styles.codeLabel}>Code</Text>
+                <View style={styles.codeBox}>
+                  <Text style={styles.codeText}>{reservationInfo.reservationCode}</Text>
+                </View>
+              </View>
+              <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
+                <Text style={styles.cancelButtonText}>Annuler réservation</Text>
+              </TouchableOpacity>
             </View>
           </View>
-          <View style={styles.reservationDetails}>
-            <View style={styles.tags}>
-              <Text style={styles.tag}>{reservationInfo.numberOfPeople} personnes</Text>
-              <Text style={styles.tag}>{reservationInfo.time}</Text>
-            </View>
-          </View>
-          <View style={styles.codeContainer}>
-            <Text style={styles.codeLabel}>Code</Text>
-            <View style={styles.codeBox}>
-              <Text style={styles.codeText}>{reservationInfo.reservationCode}</Text>
-            </View>
-          </View>
-
-          <TouchableOpacity style={styles.cancelButton} onPress={handleCancel}>
-            <Text style={styles.cancelButtonText}>Annuler réservation</Text>
-          </TouchableOpacity>
         </>
       ) : (
         <Text style={styles.noReservationText}>Pas de réservation</Text>
@@ -96,14 +107,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    paddingTop: 60,
     backgroundColor: '#fff',
   },
   header: {
     marginBottom: 16,
   },
   headerText: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
+    paddingBottom: 8,
   },
   restaurantInfo: {
     flexDirection: 'row',

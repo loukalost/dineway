@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import MapView, { Callout, Marker } from 'react-native-maps';
 import { Picker } from '@react-native-picker/picker';
@@ -101,6 +101,7 @@ export default function InfoRestaurantScreen() {
         <Ionicons name="arrow-back" size={24} color="black" />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scroll}>
+        <Text style={styles.headerText}>Infos restaurant</Text>
         <View style={styles.header}>
           <View style={styles.restaurantInfo}>
             <Image source={{ uri: restaurant.image }} style={styles.logoPlaceholder} />
@@ -198,6 +199,11 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 16,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    paddingBottom: 8,
   },
   restaurantInfo: {
     flexDirection: 'row',
