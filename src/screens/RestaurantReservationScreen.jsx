@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const formatDate = (date) => {
@@ -89,9 +89,12 @@ const RestaurantReservationPage = () => {
         </>
       )}
       {activeTab === 'validation' && (
-        <TouchableOpacity style={styles.checkButton} onPress={() => handleValidate(item)}>
-          <Text style={styles.checkButtonText}>✓</Text>
-        </TouchableOpacity>
+        <>
+          <Text style={styles.itemText}>{item.reservationCode}</Text>
+          <TouchableOpacity style={styles.checkButton} onPress={() => handleValidate(item)}>
+            <Text style={styles.checkButtonText}>✓</Text>
+          </TouchableOpacity>
+        </>
       )}
     </View>
   );
@@ -104,7 +107,6 @@ const RestaurantReservationPage = () => {
           <Text style={styles.restaurantName}>Pokai By Sushi Shop</Text>
           <Text style={styles.restaurantDetails}>3 Rue Racine, 44000 Nantes</Text>
           <Text style={styles.restaurantDetails}>⭐ 4.2</Text>
-          <Text style={styles.restaurantDetails}>8 places restantes</Text>
           <View style={styles.tags}>
             <Text style={styles.tag}>Kebabs</Text>
             <Text style={styles.tag}>Veggie</Text>

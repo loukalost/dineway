@@ -98,7 +98,7 @@ export default function InfoRestaurantScreen() {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={24} color="black" />
+        <Ionicons name="arrow-back" size={30} color="black" />
       </TouchableOpacity>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.headerText}>Infos restaurant</Text>
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 20,
+    top: 10,
     left: 10,
     zIndex: 10,
   },
