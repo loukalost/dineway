@@ -13,7 +13,7 @@ function MyTabBar({ state, descriptors, navigation }) {
   const { buildHref } = useLinkBuilder()
 
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', borderTopColor: '#E7C7C1', borderTopWidth: 2 }}>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key]
         const isFocused = state.index === index
@@ -51,6 +51,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             <MaterialIcons
               name={icon[route.name] || 'help-outline'}
               size={isFocused ? 40 : 30}
+              color="#DEA49A"
             />
           </PlatformPressable>
         )

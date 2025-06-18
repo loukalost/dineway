@@ -4,12 +4,12 @@ export default StyleSheet.create({
   // Card styles
   card: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF9F8',
     borderRadius: 10,
     padding: 12,
     marginBottom: 12,
     borderWidth: 2,
-    borderColor: '#f5f5f5',
+    borderColor: '#E7C7C1',
   },
   image: {
     width: 70,
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     gap: 8,
   },
   tag: {
-    backgroundColor: '#eee',
+    backgroundColor: '#D5F3E2',
     borderRadius: 15,
     paddingHorizontal: 12,
     paddingVertical: 4,

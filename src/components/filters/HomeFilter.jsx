@@ -57,6 +57,8 @@ function HomeFilter({ filter, selectedFilters, setSelectedFilters, i, label }) {
 const styles = StyleSheet.create({
   filter: {
     backgroundColor: "#eee",
+    borderWidth: 2,
+    borderColor: "#D5F3E2",
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 20,

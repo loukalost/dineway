@@ -215,7 +215,13 @@ const styles = StyleSheet.create({
 		textAlign: 'left',
 		width: '100%',
 	},
-	wheelContainer: { alignSelf: 'center', marginTop: 0, width: '100%' },
+	wheelContainer: {
+		alignSelf: 'center',
+		marginTop: 0,
+		width: '100%',
+		flex: 1,
+		justifyContent: 'center',
+	},
 	filtersRow: {
 		flexDirection: 'row',
 		gap: 10,

@@ -83,7 +83,7 @@ function SpinWheel({
   }, [state]);
 
   return (
-    <View style={{ alignItems: 'center', margin: 20 }}>
+    <View style={{ alignItems: 'center' }}>
       <Svg
         width={40}
         height={40}
@@ -91,7 +91,7 @@ function SpinWheel({
       >
         <Path
           d="M 20 0 L 30 20 L 10 20 Z"
-          fill="#f90"
+          fill="#DEA49A"
           stroke="#111"
           strokeWidth={2}
           transform="rotate(180 20 10)"
@@ -148,15 +148,21 @@ function SpinWheel({
       </Animated.View>
       <TouchableOpacity
         style={{
-          marginTop: 20,
-          backgroundColor: '#333',
-          padding: 10,
-          borderRadius: 8,
+          marginTop: 50,
+          backgroundColor: '#7DD8A4',
+          paddingHorizontal: 30,
+          paddingVertical: 15,
+          borderRadius: 50,
         }}
         onPress={spin}
         disabled={spinning}
       >
-        <Text style={{ color: '#fff' }}>
+        <Text style={{
+          color: '#292929',
+          fontSize: 16,
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+         }}>
           {spinning ? 'En cours...' : 'Tourner la roue'}
         </Text>
       </TouchableOpacity>

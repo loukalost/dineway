@@ -188,9 +188,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: 50,
   },
   scroll: {
     padding: 16,
+    paddingTop: 0,
     paddingBottom: 100,
   },
   header: {
@@ -235,7 +237,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   section: {
-    backgroundColor: '#fafafa',
+    backgroundColor: '#FFF9F8',
+    borderWidth: 2,
+    borderColor: '#E7C7C1',
     padding: 12,
     borderRadius: 8,
     marginTop: 10,
@@ -278,6 +282,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
     backgroundColor: '#f1f1f1',
+    borderColor: '#D5F3E2',
+    borderWidth: 2,
     padding: 8,
     borderRadius: 8,
   },
@@ -285,17 +291,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   validateBtn: {
-    backgroundColor: '#000',
+    backgroundColor: '#7DD8A4',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
   },
   validateText: {
-    color: '#fff',
+    color: '#292929',
     fontWeight: 'bold',
   },
   pickerContainer: {
     backgroundColor: '#f0f0f0',
+    borderColor: '#D5F3E2',
+    borderWidth: 2,
     borderRadius: 5,
     width: 120,
     height: 40,

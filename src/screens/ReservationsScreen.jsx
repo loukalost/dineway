@@ -87,7 +87,9 @@ const ReservationPage = () => {
           </TouchableOpacity>
         </>
       ) : (
-        <Text style={styles.noReservationText}>Pas de réservation</Text>
+        <View style={styles.noReservationContainer}>
+          <Text style={styles.noReservationText}>Pas de réservation</Text>
+        </View>
       )}
     </View>
   );
@@ -98,7 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#fff',
-    paddingTop: 20,
+    paddingTop: 50,
   },
   header: {
     marginBottom: 16,
@@ -111,8 +113,9 @@ const styles = StyleSheet.create({
   },
   restaurantInfo: {
     flexDirection: 'row',
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderWidth: 2,
+    borderColor: '#DEA49A',
+    backgroundColor: '#FFF9F8',
     borderRadius: 8,
     padding: 16,
     marginBottom: 16,
@@ -165,8 +168,8 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   codeBox: {
-    borderWidth: 1,
-    borderColor: '#ccc',
+    borderWidth: 2,
+    borderColor: '#DEA49A',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -176,7 +179,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   cancelButton: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#DEA49A',
+    color: '#292929',
     borderRadius: 8,
     padding: 16,
     alignItems: 'center',
@@ -190,13 +194,18 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   tag: {
-    backgroundColor: '#eee',
+    backgroundColor: '#D5F3E2',
     borderRadius: 15,
     paddingHorizontal: 12,
     paddingVertical: 4,
   },
   tagText: {
     fontSize: 12,
+  },
+  noReservationContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noReservationText: {
     fontSize: 18,
