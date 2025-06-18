@@ -13,6 +13,7 @@ const ChoiceRoleScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.headerText}>Choisissez votre rôle</Text>
       <TouchableOpacity style={styles.card} onPress={() => handleChoice('utilisateur')}>
         <Text style={styles.text}>Utilisateur</Text>
       </TouchableOpacity>
@@ -28,18 +29,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-around',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
+    paddingVertical: 50,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
   card: {
     width: '80%',
-    height: '30%',
+    height: '35%',
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#000',
+    borderWidth: 2,
+    borderColor: '#7DD8A4',
+    backgroundColor: '#EAF7F0',
+    borderRadius: 15,
   },
   text: {
     fontSize: 20,
+    fontWeight: 'bold',
   },
 })
 

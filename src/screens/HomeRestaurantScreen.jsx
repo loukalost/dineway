@@ -15,7 +15,7 @@ const HomeRestaurantScreen = () => {
     <View style={styles.mainContainer}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Toto !</Text>
+          <Text style={styles.headerText}>Bienvenue !</Text>
           <TouchableOpacity onPress={handleLogout}>
             <MaterialIcons name="logout" size={24} color="black" />
           </TouchableOpacity>

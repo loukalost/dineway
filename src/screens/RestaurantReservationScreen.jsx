@@ -78,29 +78,42 @@ const RestaurantReservationPage = () => {
     );
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.item}>
-      <Text style={styles.itemText}>{item.numberOfPeople} personnes</Text>
-      <Text style={styles.itemText}>{item.time}</Text>
-      {activeTab === 'code' && (
-        <>
-          <Text style={styles.itemText}>{item.date}</Text>
-          <Text style={styles.itemText}>{item.reservationCode}</Text>
-        </>
-      )}
-      {activeTab === 'validation' && (
-        <>
-          <Text style={styles.itemText}>{item.reservationCode}</Text>
-          <TouchableOpacity style={styles.checkButton} onPress={() => handleValidate(item)}>
-            <Text style={styles.checkButtonText}>✓</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
-  );
+  const renderItem = ({ item }) => {
+    // Choix des couleurs selon le tab actif
+    const isCode = activeTab === 'code';
+    const itemStyle = [
+      styles.item,
+      {
+        backgroundColor: isCode ? '#EAF7F0' : '#FFF9F8', // vert si code, rose si validation
+        borderColor: isCode ? '#7DD8A4' : '#DEA49A',     // vert si code, rose si validation
+      },
+    ];
+
+    return (
+      <View style={itemStyle}>
+        <Text style={styles.itemText}>{item.numberOfPeople} personnes</Text>
+        <Text style={styles.itemText}>{item.time}</Text>
+        {isCode && (
+          <>
+            <Text style={styles.itemText}>{item.date}</Text>
+            <Text style={styles.itemText}>{item.reservationCode}</Text>
+          </>
+        )}
+        {!isCode && (
+          <>
+            <Text style={styles.itemText}>{item.reservationCode}</Text>
+            <TouchableOpacity style={styles.checkButton} onPress={() => handleValidate(item)}>
+              <Text style={styles.checkButtonText}>✓</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
+      <Text style={styles.headerText}>Mon restaurant</Text>
       <View style={styles.header}>
         <View style={styles.logoPlaceholder} />
         <View style={styles.restaurantInfo}>
@@ -108,8 +121,8 @@ const RestaurantReservationPage = () => {
           <Text style={styles.restaurantDetails}>3 Rue Racine, 44000 Nantes</Text>
           <Text style={styles.restaurantDetails}>⭐ 4.2</Text>
           <View style={styles.tags}>
-            <Text style={styles.tag}>Kebabs</Text>
-            <Text style={styles.tag}>Veggie</Text>
+            <Text style={styles.tag}>🥙 Kebabs</Text>
+            <Text style={styles.tag}>🌱 Veggie</Text>
           </View>
         </View>
       </View>
@@ -131,7 +144,9 @@ const RestaurantReservationPage = () => {
             keyExtractor={(item, index) => index.toString()}
           />
         ) : (
-          <Text style={styles.noReservationText}>Aucune réservation en attente de code</Text>
+          <View style={styles.noReservationContainer}>
+            <Text style={styles.noReservationText}>📭 Aucune réservation en attente de code</Text>
+          </View>
         )
       ) : (
         historyReservations.length > 0 ? (
@@ -141,7 +156,9 @@ const RestaurantReservationPage = () => {
             keyExtractor={(item, index) => index.toString()}
           />
         ) : (
-          <Text style={styles.noReservationText}>Aucune réservation dans l'historique</Text>
+          <View style={styles.noReservationContainer}> ↓ 
+            <Text style={styles.noReservationText}>📭 Aucune réservation dans l'historique</Text>
+          </View>
         )
       )}
     </View>
@@ -152,7 +169,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingTop: 50,
     padding: 16,
+  },
+  headerText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    paddingBottom: 20,
   },
   header: {
     flexDirection: 'row',
@@ -179,19 +202,20 @@ const styles = StyleSheet.create({
   },
   tags: {
     flexDirection: 'row',
+    gap: 8,
     marginTop: 8,
   },
   tag: {
-    fontSize: 12,
-    backgroundColor: '#e0e0e0',
-    padding: 4,
-    borderRadius: 4,
-    marginRight: 8,
+    backgroundColor: '#D5F3E2',
+    borderRadius: 15,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
   },
   tabs: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
+    marginTop: 16,
   },
   tab: {
     fontSize: 16,
@@ -208,8 +232,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     marginBottom: 8,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#EAF7F0', // fond plus tamisé
     borderRadius: 8,
+    borderWidth: 2, // ajout du contour
+    borderColor: '#7DD8A4', // vert
   },
   itemText: {
     fontSize: 14,
@@ -238,6 +264,11 @@ const styles = StyleSheet.create({
   cancelButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  noReservationContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noReservationText: {
     fontSize: 16,

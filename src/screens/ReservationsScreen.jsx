@@ -109,7 +109,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     paddingBottom: 8,
-
   },
   restaurantInfo: {
     flexDirection: 'row',
