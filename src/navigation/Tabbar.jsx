@@ -6,7 +6,8 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 const icon = {
   Home: 'home-filled',
   Surprise: 'casino',
-  Reservations: 'table-restaurant',
+  RestaurantReservation: 'table-restaurant',
+  ReservationsUser: 'article'
 }
 
 function MyTabBar({ state, descriptors, navigation }) {
